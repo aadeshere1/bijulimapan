@@ -8,5 +8,11 @@
     <input id="email" type="email" name="email" >
     <input type="submit">
   </form>
+
+    {% for user in allUser %}
+    <li>{{ user.id }} - {{ user.username }} - {{ user.email }}</li>
+    {% endfor %}
+
+    {{ oneUser.id }} - {{ oneUser.username  }} - {{ oneUser.email }}
 </body>
 </html>
