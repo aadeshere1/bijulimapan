@@ -5,7 +5,7 @@ import os
 
 app = Flask(__name__)
 if os.environ['ENV'] == 'production':
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URI']
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost/flaskmovie'
 
