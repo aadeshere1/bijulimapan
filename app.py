@@ -25,6 +25,14 @@ def index():
     oneUser = User.query.filter_by(username="aadesh").first()
     return render_template('add_user.html', allUser=allUser, oneUser=oneUser)
 
+@app.route('/profile/<username>')
+def profile(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        return redirect(url_for('index'))
+    else:
+        return render_template('profile.html', user=user)
+
 @app.route('/post_user', methods=['POST'])
 def post_user():
     user = User(request.form['username'], request.form['email'])
