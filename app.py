@@ -1,9 +1,14 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask import request, redirect, render_template, url_for
+import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost/flaskmovie'
+if os.environ['ENV'] == 'production':
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URI']
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost/flaskmovie'
+
 app.debug = True
 db = SQLAlchemy(app)
 
