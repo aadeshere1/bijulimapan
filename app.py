@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask import request, redirect, render_template, url_for
+from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
+
 import os
 
 app = Flask(__name__)
@@ -12,17 +14,34 @@ else:
 app.debug = True
 db = SQLAlchemy(app)
 
-class User(db.Model):
+roles_users = db.Table('roles_users',
+        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
+        db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
+
+class Role(db.Model, RoleMixin):
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
+
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True)
-    email = db.Column(db.String(120), unique=True)
+    email = db.Column(db.String(255), unique=True)
+    password = db.Column(db.String(255))
+    active = db.Column(db.Boolean())
+    confirmed_at = db.Column(db.DateTime())
+    roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy='dynamic'))
 
-    def __init__(self, username, email):
-        self.username = username
-        self.email = email
 
-    def __repr__(self):
-        return '<User %r>' % self.username
+# setup flask security
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+security = Security(app, user_datastore)
+
+#create a user to test
+@app.before_first_request
+def create_user():
+    db.create_all()
+    user_datastore.create_user(email='aadesh@gmail.com', password='password')
+    db.session.commit()
 
 @app.route('/')
 def index():
