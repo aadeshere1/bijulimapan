@@ -1,18 +1,13 @@
 <html>
-<head><title>Flask Movie</title></head>
-<body>
-  <form action="/post_user" method="post">
-    <label>Username:</label>
-    <input id="username" type="text" name="username">
-    <label>Email:</label>
-    <input id="email" type="email" name="email" >
-    <input type="submit">
-  </form>
+  <head><title>Flask Movie</title></head>
+  <body>
+    <form action="/post_user" method="post">
+      <label>Username:</label>
+      <input id="username" type="text" name="username">
+      <label>Email:</label>
+      <input id="email" type="email" name="email" >
+      <input type="submit">
+    </form>
 
-    {% for user in allUser %}
-    <li>{{ user.id }} - {{ user.username }} - {{ user.email }}</li>
-    {% endfor %}
-
-    {{ oneUser.id }} - {{ oneUser.username  }} - {{ oneUser.email }}
-</body>
+  </body>
 </html>
