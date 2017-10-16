@@ -1,12 +1,35 @@
 <html>
   <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
     <title>Upload your files</title>
   </head>
   <body>
-    <h1>File uploader</h1>
-    <form id="upload-form" action="{{url_for('upload')}}" method="POST" enctype="multipart/form-data">
-      <input type="file" name="file" accept="image/*" >
-      <input type="submit" value="Process it">
+    <h2 style="text-align: center" class="light-blue-text">File uploader</h2>
+    <div class="container" style="margin-top: 100px; text-align: center">
+        
+            <form id="upload-form" action="{{url_for('upload')}}" method="POST" enctype="multipart/form-data">
+            <div class="row">
+            <div class="col s7">
+                  <div class="file-field input-field">
+      <div class="btn">
+        <span>File</span>
+        <input type="file" name="file" accept="image/*">
+      </div>
+      <div class="file-path-wrapper">
+        <input class="file-path validate" type="text">
+      </div>
+    </div>
+    </div>
+     <div class="col s5">
+          <button class="btn waves-effect waves-light btn-large" type="submit" name="action">Process It
+  </button>
+     </div>
+     </div>
     </form>
+     
+            
+    </div>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   </body>
 </html>
