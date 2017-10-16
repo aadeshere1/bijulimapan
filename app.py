@@ -4,10 +4,13 @@ from flask import request, redirect, render_template, url_for
 from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
 from flask_mail import Mail
 import os
+import numpy as np
+import cv2
+
 
 mail = Mail()
 app = Flask(__name__)
-
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 app.config.update(
         DEBUG=True,
         MAIL_SERVER='smtp.gmail.com',
@@ -80,6 +83,42 @@ def post_user():
     db.session.add(user)
     db.session.commit()
     return redirect(url_for('index'))
+
+@app.route('/upload')
+def uploadForm():
+    return render_template('upload.html')
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    target = os.path.join(APP_ROOT, 'images/')
+    cvTarget = os.path.join(APP_ROOT, 'manipulated/')
+    print(target)
+
+    if not os.path.isdir(target):
+        os.mkdir(target)
+
+    if not os.path.isdir(cvTarget):
+        os.mkdir(cvTarget)
+
+        
+    file = request.files['file']
+    print(file.filename)
+    destination = "/".join([target, file.filename])
+    file.save(destination)
+    ref = cv2.imread(destination)
+    img = cv2.cvtColor(ref, cv2.COLOR_RGB2GRAY)
+    cv2.imwrite(img, cvTarget, 'jpg')
+    return render_template('complete.html')
+
+    #for file in request.files.getlist("file"):
+    #    print(file)
+    #    filename = file.filename
+    #    destination = "/".join([target, filename])
+    #    print(destination)
+    #    file.save(destination)
+    #    print("removing" + destination)
+    #    os.remove(destination)
+    #return render_template('complete.html')
 
 if __name__ == "__main__":
     app.run()

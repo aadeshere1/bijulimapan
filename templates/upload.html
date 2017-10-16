@@ -1,0 +1,12 @@
+<html>
+  <head>
+    <title>Upload your files</title>
+  </head>
+  <body>
+    <h1>File uploader</h1>
+    <form id="upload-form" action="{{url_for('upload')}}" method="POST" enctype="multipart/form-data">
+      <input type="file" name="file" accept="image/*" >
+      <input type="submit" value="Process it">
+    </form>
+  </body>
+</html>
