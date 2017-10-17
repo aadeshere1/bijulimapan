@@ -46,12 +46,15 @@ class Role(db.Model, RoleMixin):
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(255), unique=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255))
     active = db.Column(db.Boolean())
     confirmed_at = db.Column(db.DateTime())
     roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy='dynamic'))
 
+    def __repr__(self):
+        return '<User %r>' % self.username
 
 # setup flask security
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
@@ -79,7 +82,7 @@ def profile(email):
 
 @app.route('/post_user', methods=['POST'])
 def post_user():
-    user = User(request.form['username'], request.form['email'])
+    user = User(username=request.form['username'], email=request.form['email'])
     db.session.add(user)
     db.session.commit()
     return redirect(url_for('index'))
@@ -100,7 +103,6 @@ def upload():
     if not os.path.isdir(cvTarget):
         os.mkdir(cvTarget)
 
-        
     file = request.files['file']
     print(file.filename)
     destination = "/".join([target, file.filename])
